@@ -1,0 +1,26 @@
+sudo: required
+
+os:
+  - linux
+
+language: go
+go:
+  - "1.12.1"
+go_import_path: v2ray.com/core
+
+git:
+  depth: false
+
+before_script:
+  - uname -a
+  - date
+
+script:
+  - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/main.go -o $GOPATH/src/v2ray.com/core/main/main.go
+  - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/transport/internet/tls/config.go -o $GOPATH/src/v2ray.com/core/main/transport/intermet/tls/config.go
+  - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/distro/all/all.go -o $GOPATH/src/v2ray.com/main/distro/all/all.go
+  - go build v2ray.com/core/main -o v2ray
+  - GOARCH=amd64 GOOS=windows go build v2ray.com/core/main -o v2ray.exe
+
+after_success:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./testing/coverage/coverall; fi
