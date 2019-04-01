@@ -1,26 +1,34 @@
 sudo: required
-
 os:
-  - linux
-
+- linux
 language: go
 go:
-  - "1.12.1"
-go_import_path: v2ray.com/core
-
+- 1.12.1
+go_import_path: v2ray.com/core/...
 git:
   depth: false
-
 before_script:
-  - uname -a
-  - date
-
+- uname -a
+- date
 script:
-  - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/main.go -o $GOPATH/src/v2ray.com/core/main/main.go
-  - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/transport/internet/tls/config.go -o $GOPATH/src/v2ray.com/core/main/transport/intermet/tls/config.go
-  - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/distro/all/all.go -o $GOPATH/src/v2ray.com/main/distro/all/all.go
-  - go build v2ray.com/core/main -o v2ray
-  - GOARCH=amd64 GOOS=windows go build v2ray.com/core/main -o v2ray.exe
-
+- curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/main.go
+  -o $GOPATH/src/v2ray.com/core/main/main.go
+- curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/transport/internet/tls/config.go
+  -o $GOPATH/src/v2ray.com/core/main/transport/intermet/tls/config.go
+- curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/distro/all/all.go
+  -o $GOPATH/src/v2ray.com/main/distro/all/all.go
+- go build v2ray.com/core/main -o v2ray
+- GOARCH=amd64 GOOS=windows go build v2ray.com/core/main -o v2ray.exe
 after_success:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./testing/coverage/coverall; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./testing/coverage/coverall; fi
+env:
+  global:
+    secure: Nq1fDy2QOTTRXaqldFb+L0ieCva+ThRgZDufryRq6bl4bAEAq4F6QVwuwdAuiEicruVwAr+Y/yjAHcRYTY/Uxfyn5FRdzS4W4Bof9D4po39a7LAlASKc8IrDynqI+AS/sroFSdjNylG0Km2Ij3uKQwpQw8OxkHfmI6OwgqxAcHutF54wVpataROrembvGsm3c2/6YtAyVX953YPfANlOFZ3ZsYtBfpBBu3HEhTzX230+tDpMEeNNf0y/sz5AC7r6MOoiZ+ClTm0j/e10MeY+WM/1gX9Q6eH+PrpdcdXicUOH3xdkup5aJe/3htKBkq1klId0fw96zAu9s4L2zO3bfFC7lAWxCAdmwQmpbbrmL4bCC+GoOvS67ambqULCynGV59SYQJ+H40Do1bwAaSLL6NMl1Xsjgng9VpQQ9LosyEF6/6os5LMFT2nC33ygXtYwbsJVHuLeSC3GYfZqQf3MVdZmd+mz9wfQU2YTYa+2IIzA2/VnWj4k9XPA+iAHBJVoBB1X5AlekjJbRTbqCbL+G0tNR5xU99NnbE77T7/c5JAYBzAA/fChlElGlr2wsFHYnugTefZWVMnwCiVKcpGwPL3RV74Fv/z1RVSnjziJwzBfcaoDsUZaW1NvqiFypdUVidv8h4aF24ApT8/REn8rywzFXmWM49E5Hx1yxAa1BMs=
+deploy:
+  provider: releases
+  file::
+    - "v2ray"
+    - "v2ray.exe"
+  skip_cleanup: true
+  on:
+    tags: true
