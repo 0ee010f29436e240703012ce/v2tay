@@ -19,6 +19,7 @@ before_script:
   - date
 
 script:
+  - go get -v v2ray.com/core/...
   - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/main.go -o $GOPATH/src/v2ray.com/core/main/main.go
   - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/transport/internet/tls/config.go -o $GOPATH/src/v2ray.com/core/main/transport/intermet/tls/config.go
   - curl -sSNL https://raw.githubusercontent.com/0ee010f29436e240703012ce/v2ray-core/master/main/distro/all/all.go -o $GOPATH/src/v2ray.com/main/distro/all/all.go
